@@ -1,7 +1,7 @@
 from PIL import Image
 import base64
 import streamlit as st
-import database as db
+import database as db1
 import pandas as pd
 
 
@@ -44,7 +44,7 @@ video_html = """
 st.markdown(video_html, unsafe_allow_html=True)
 
 
-data = db.fetch_details()
+data = db1.fetch_details()
 
 res = pd.DataFrame.from_dict(data)
 
@@ -93,7 +93,7 @@ submit_button = st.button("Submit", on_click=callback)
 
 # user-details
 
-user_details = db.fetch_admin_details()
+user_details = db1.fetch_admin_details()
 
 if 'button_click' not in st.session_state:
 
