@@ -1,13 +1,51 @@
 from PIL import Image
 import base64
 import streamlit as st
-import database as db1
+# import database as db1
 import pandas as pd
+from deta import Deta
+import os
+
+
+deta = Deta(st.secrets["DETA_KEY"])
+
+deta1 = Deta(st.secrets["DETA_KEY2"])
+
+
+db = deta.Base("info_db")
+
+usrdb = deta1.Base("login_db")
+
+
+# Functions related to admin page-
+
+def insert_new_admin(username, name, password):
+
+    return usrdb.put({"key": username, "Name": name, "Password": password})
+
+
+def fetch_admin_details():
+
+    res = usrdb.fetch()
+
+    return res.items
+
+
+# Functions related to home page-
+
+def insert_values(date_t, uid, name, gender, ptype, result):
+
+    return db.put({"Date and Time": date_t, "key": uid, "Name": name, "Gender": gender, "Person": ptype, "Personality Type": result})
+
+
+def fetch_details():
+
+    res = db.fetch()
+
+    return res.items
 
 
 # example
-
-
 video_html = """
         <style>
 
@@ -44,7 +82,7 @@ video_html = """
 st.markdown(video_html, unsafe_allow_html=True)
 
 
-data = db1.fetch_details()
+data = fetch_details()
 
 res = pd.DataFrame.from_dict(data)
 
@@ -93,7 +131,7 @@ submit_button = st.button("Submit", on_click=callback)
 
 # user-details
 
-user_details = db1.fetch_admin_details()
+user_details = fetch_admin_details()
 
 if 'button_click' not in st.session_state:
 
